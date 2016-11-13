@@ -26,7 +26,7 @@ public class Camera {
 	{
 		cameraMatrix = new Matrix4f();
 		this.centerOfProjection = new Vector3f(0f,0f,10f);
-		this.lookAtPoint = new Vector3f(0f,0f,0f);
+		this.lookAtPoint = new Vector3f(-0f,0f,0f);
 		this.upVector = new Vector3f(0f,1f,0f);
 		this.update();
 		
@@ -35,6 +35,19 @@ public class Camera {
 					 0.f, 0.f, 1.f, -10.f,
 					 0.f, 0.f, 0.f, 1.f};
 		cameraMatrix.set(f);*/
+	}
+
+	public Camera(int i){
+		this();
+		if(i==1){
+			this.centerOfProjection= new Vector3f(0f,0f,40f);
+			this.update();
+		}
+		if(i==2){
+			this.centerOfProjection=new Vector3f(-10f,40f,40f);
+			this.lookAtPoint = new Vector3f(-5f,0f,0f);
+			this.update();
+		}
 	}
 	
 	/**

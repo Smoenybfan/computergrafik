@@ -15,7 +15,8 @@ import java.util.TimerTask;
  * shows a rotating cube.
  */
 public class simple
-{	
+{	static float[][] landscape = new float[(int) Math.pow(2,3)+1][(int) Math.pow(2,3)+1];
+
 	static RenderPanel renderPanel;
 	static RenderContext renderContext;
 	static Shader normalShader;
@@ -60,7 +61,7 @@ public class simple
 						 0,-1,0, 0,-1,0, 0,-1,0, 0,-1,0};		// bottom face
 
 			// The vertex colors
-			float c[] = {1,0,0, 1,0,0, 1,0,0, 1,0,0,
+			float c[] = {255,255,255, 255,255,255, 255,255,255, 255,255,255,
 					     0,1,0, 0,1,0, 0,1,0, 0,1,0,
 						 1,0,0, 1,0,0, 1,0,0, 1,0,0,
 						 0,1,0, 0,1,0, 0,1,0, 0,1,0,
@@ -211,19 +212,19 @@ public class simple
 					break;
 				}
 				case 'n': {
-					// Remove material from shape, and set "normal" shader
+					// Remove material from cylindershape, and set "normal" shader
 					shape.setMaterial(null);
 					renderContext.useShader(normalShader);
 					break;
 				}
 				case 'd': {
-					// Remove material from shape, and set "default" shader
+					// Remove material from cylindershape, and set "default" shader
 					shape.setMaterial(null);
 					renderContext.useDefaultShader();
 					break;
 				}
 				case 'm': {
-					// Set a material for more complex shading of the shape
+					// Set a material for more complex shading of the cylindershape
 					if(shape.getMaterial() == null) {
 						shape.setMaterial(material);
 					} else
@@ -264,7 +265,7 @@ public class simple
 		// Make the main window of this application and add the renderer to it
 		JFrame jframe = new JFrame("simple");
 		jframe.setSize(500, 500);
-		jframe.setLocationRelativeTo(null); // center of screen
+		jframe.setLocationRelativeTo(null); // toruscenter of screen
 		jframe.getContentPane().add(renderPanel.getCanvas());// put the canvas into a JFrame window
 
 		// Add a mouse and key listener
@@ -275,4 +276,6 @@ public class simple
 	    jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	    jframe.setVisible(true); // show window
 	}
+
+
 }

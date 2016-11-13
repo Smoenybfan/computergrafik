@@ -15,10 +15,11 @@ public class Light {
 	{
 		// Default light parameters
 		direction = new Vector3f(0.f,0.f,1.f);
-		position = new Vector3f(0.f,0.f,1.f);
+		position = new Vector3f(2.f,0.5f,-1.f);
 		type = Type.DIRECTIONAL;
 		diffuse = new Vector3f(1.f,1.f,1.f);
 		ambient = new Vector3f(0.f,0.f,0.f);
+		diffuse.scale(150);
 		specular = new Vector3f(1.f,1.f,1.f);
 		attenuation = new Vector3f();
 		spotDirection = new Vector3f(0.f,0.f,1.f);
@@ -36,4 +37,6 @@ public class Light {
 	public float spotExponent;
 	public float spotCutoff;
 	public Type type;
+
+
 }

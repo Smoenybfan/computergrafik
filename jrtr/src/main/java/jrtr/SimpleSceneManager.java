@@ -21,11 +21,21 @@ public class SimpleSceneManager implements SceneManagerInterface {
 		camera = new Camera();
 		frustum = new Frustum();
 	}
+
+	public SimpleSceneManager(int i){
+		this();
+		camera = new Camera(i);
+		if(i==1||i==2){
+			frustum = new Frustum(1,100,1,60);
+		}
+	}
 	
 	public Camera getCamera()
 	{
 		return camera;
 	}
+
+	public void setCamera(Camera cam){this.camera=cam;}
 	
 	public Frustum getFrustum()
 	{

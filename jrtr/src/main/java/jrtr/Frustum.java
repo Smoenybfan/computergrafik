@@ -19,13 +19,23 @@ public class Frustum {
 	 * Construct a default viewing frustum. The frustum is given by a 
 	 * default 4x4 projection matrix.
 	 */
-	public Frustum()
+	public Frustum(float nearPlane, float farPlane, float aspectRatio, float verticalFOV)
 	{
 		projectionMatrix = new Matrix4f();
-		float f[] = {2.f, 0.f, 0.f, 0.f, 
-					 0.f, 2.f, 0.f, 0.f,
-				     0.f, 0.f, -1.02f, -2.02f,
-				     0.f, 0.f, -1.f, 0.f};
+		float f[] = {1.f/(aspectRatio*(float)Math.tan(Math.toRadians(verticalFOV/2))), 0.f, 0.f, 0.f,
+					 0.f, 1.f/(float)(Math.tan(Math.toRadians(verticalFOV/2))), 0.f, 0.f,
+				     0.f, 0.f, (nearPlane+farPlane)/(nearPlane-farPlane), (2*nearPlane*farPlane)/(nearPlane-farPlane),
+				     0.f, 0.f, (-1.f), 0.f};
+		projectionMatrix.set(f);
+	}
+
+	public Frustum(){
+		projectionMatrix = new Matrix4f();
+		float f[] ={2.f,0.f,0.f,0.f,
+					0.f,2.f,0.f,0.f,
+					0.f,0.f,-1.02f,-2.02f,
+					0.f,0.f,-1.f,0.f
+		};
 		projectionMatrix.set(f);
 	}
 	
