@@ -56,12 +56,7 @@ public class LearnScene
             float v[] = concatenateVertices();
 
             // The vertex normals
-            float n[] = {0,0,1, 0,0,1, 0,0,1, 0,0,1,			// front face
-                    -1,0,0, -1,0,0, -1,0,0, -1,0,0,		// left face
-                    0,0,-1, 0,0,-1, 0,0,-1, 0,0,-1,		// back face
-                    1,0,0, 1,0,0, 1,0,0, 1,0,0,			// right face
-                    0,1,0, 0,1,0, 0,1,0, 0,1,0,			// top face
-                    0,-1,0, 0,-1,0, 0,-1,0, 0,-1,0};		// bottom face
+            float n[] = getTextureCoordinates((int) (2f/3f*v.length));		// bottom face
 
             // The vertex colors
             float c[] = getVerticeColors(v);
@@ -86,6 +81,7 @@ public class LearnScene
             sceneManager = new SimpleSceneManager();
             shape = new Shape(vertexData);
             sceneManager.addShape(shape);
+
             sceneManager.addShape(floor);
 
             // Add the scene to the renderer
@@ -100,6 +96,34 @@ public class LearnScene
                 System.out.print(e.getMessage());
             }
 
+/*
+            Light light = new Light();
+            light.type= Light.Type.SPOT;
+            light.diffuse=new Vector3f(1,0,0);
+            light.direction=new Vector3f(1,-1,0);
+            light.position=new Vector3f(-5,0,-15);
+            sceneManager.addLight(light);
+
+            Light light1 = new Light();
+            light1.type= Light.Type.SPOT;
+            light1.diffuse=new Vector3f(1f,1f,1f);
+            light1.diffuse.scale(0.5f);
+            light1.direction = new Vector3f(0,0,0);
+            Vector3f position = new Vector3f(5,3,-15);
+            //sceneManager.getCamera().getCameraMatrix().transform(position);
+            light1.position = position;
+            sceneManager.addLight(light1);
+*/
+            Light light2 = new Light();
+            light2.type= Light.Type.SPOT;
+            light2.diffuse=new Vector3f(1f,1f,1f);
+            light2.diffuse.scale(50f);
+            light2.direction = new Vector3f(0,0,0);
+            Vector3f position = new Vector3f(0,3,-20);
+            //sceneManager.getCamera().getCameraMatrix().transform(position);
+            light2.position = position;
+            sceneManager.addLight(light2);
+
             diffuseShader = renderContext.makeShader();
             try {
                 diffuseShader.load("../jrtr/shaders/myShader.vert", "../jrtr/shaders/myShader.frag");
@@ -109,10 +133,12 @@ public class LearnScene
             }
 
             floorMaterial=new Material();
+            floorMaterial.diffuseMap=renderContext.makeTexture();
             floorMaterial.shader=diffuseShader;
             floorMaterial.texture = renderContext.makeTexture();
             try {
                 floorMaterial.texture.load("../textures/stone.jpg");
+                floorMaterial.diffuseMap.load("../textures/stone.jpg");
             } catch (Exception e){
                 System.out.print("Scho no schad chani di textur ni lade he");
                 System.out.print(e.getMessage());
@@ -122,6 +148,7 @@ public class LearnScene
             // Make a material that can be used for shading
             material = new Material();
             material.shader = diffuseShader;
+            material.diffuseMap=renderContext.makeTexture();
             material.diffuseMap = renderContext.makeTexture();
             try {
                 material.diffuseMap.load("../textures/stone.jpg");
@@ -136,20 +163,6 @@ public class LearnScene
             currentstep = basicstep;
             timer.scheduleAtFixedRate(new AnimationTask(), 0, 10);
 
-            Light light = new Light();
-            light.type= Light.Type.SPOT;
-            light.diffuse=new Vector3f(0,0,150);
-            light.direction=new Vector3f(1,-1,0);
-            light.position=new Vector3f(-3,4,0);
-            sceneManager.addLight(light);
-
-            Light light1 = new Light();
-            light.diffuse=new Vector3f(250,250,250);
-            light.direction = new Vector3f(1,0,0);
-            Vector3f position = new Vector3f(5,-3f,0);
-            //sceneManager.getCamera().getCameraMatrix().transform(position);
-            light.position = position;
-            sceneManager.addLight(light1);
 
         }
 
@@ -394,7 +407,7 @@ public class LearnScene
             shape.setTransformation(t);*/
 
             // Trigger redrawing of the render window
-            renderPanel.getCanvas().repaint();
+            //renderPanel.getCanvas().repaint();
         }
     }
 
@@ -426,7 +439,7 @@ public class LearnScene
     {
         public void keyPressed(KeyEvent e)
         {
-            switch(e.getKeyChar())
+            switch(Character.toLowerCase(e.getKeyChar()))
             {
                 case 's': {
                     // Stop animation
@@ -462,9 +475,10 @@ public class LearnScene
                 }
                 case 'm': {
                     // Set a material for more complex shading of the cylindershape
-                    if(shape.getMaterial() == null) {
+                    if(floor.getMaterial() == null) {
                         shape.setMaterial(material);
                         floor.setMaterial(floorMaterial);
+                       // renderContext.useShader(floorMaterial.shader);
                     } else
                     {
                         shape.setMaterial(null);

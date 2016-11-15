@@ -9,16 +9,14 @@
 // Uniform variables passed in from host program
 uniform sampler2D myTexture;
 uniform int nLights;
-uniform int shininess;
 
 uniform vec4 lightDirection[MAX_LIGHTS];
-uniform vec4 lightDiffuseRadiance[MAX_LIGHTS];
+uniform vec4 lightColor[MAX_LIGHTS];
 
 
 uniform vec3 lightPosition[MAX_LIGHTS];
 uniform float lightReflection[MAX_LIGHTS];
 uniform vec3 viewPos;
-uniform vec3 camPos;
 
 
 in vec2 frag_texcoord;
@@ -35,12 +33,12 @@ out vec4 frag_shaded;
 
 void main()
 {
-lightDirection;
+
    vec2 frag_texcoor = vec2(FragPos);
-   vec4 texColor = texture(myTexture, frag_texcoor);
+        	vec4 texColor = texture(myTexture, frag_texcoor);
+            frag_shaded = texColor;
 
-
-    vec4 color = vec4(1,1,1,0);//texture(myTexture, frag_texcoord);
+    vec4 color = texture(myTexture, frag_texcoord);
     //color = texColor;
 
     // Ambient
@@ -54,31 +52,30 @@ lightDirection;
     for(int i = 0; i < nLights; i++) {
         vec3 norm = normalize(Normal);
         vec3 lightDiff = (lightPosition[i] - FragPos);
-        float distanceSqr = length(lightPosition[i]-FragPos);
+        float distanceSqr = lightDiff.x*lightDiff.x+lightDiff.y*lightDiff.y+lightDiff.z*lightDiff.z;
         vec3 lightDir = normalize(lightDiff);
-        float ndotl = max(dot(norm, lightDir), 0.0);
-        diffuse = diffuse + ndotl*lightDiffuseRadiance[i]*(1/pow(distanceSqr,2));
-
-
-       }
+        float diff = max(dot(norm, lightDir), 0.0);
+        vec4 dir = lightDirection[i]; //useless
+       // diffuse = diffuse + diff*lightColor[i]*(1/distanceSqr);
+        diffuse = diffuse + diff*lightColor[i];
+    }
 
 
         // Specular
         vec4 specular = vec4(0,0,0,0);
         for(int i = 0; i < nLights; i++) {
-            vec3 n = normalize(Normal);
-            vec3 L = normalize(lightPosition[i] - FragPos);
-            float distanceSqr = length(lightPosition[i]-FragPos);
-            vec3 R = reflect(-L,n);
-            vec3 e = normalize(-FragPos);
-            float rdotes = pow(max(dot(R,e), 0.0), shininess);
-            specular = specular + lightDiffuseRadiance[i]/pow(distanceSqr,2) * vec4(1,1,1,0) * rdotes;
+            vec3 norm = normalize(Normal);
+            float specularStrength = 0.8f;
+            vec3 viewDir = normalize(viewPos - FragPos);
+            vec3 reflectDir = reflect(vec3(-lightDirection[i]), norm);
+            float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
+            specular = specular+specularStrength * spec * lightColor[i];
         }
 
 
 
 
-    frag_shaded = (specular+diffuse)*color+ambient;
+    frag_shaded = (specular+ambient+diffuse)*color;
 
 
 

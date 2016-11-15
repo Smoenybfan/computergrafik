@@ -21,7 +21,7 @@ public class Material {
 		diffuse = new Vector3f(1.f, 1.f, 1.f);
 		specular = new Vector3f(1.f, 1.f, 1.f);
 		ambient = new Vector3f(1.f, 1.f, 1.f);
-		shininess = 1.f;
+		shininess = 10000.f;
 		diffuseMap = null;
 		normalMap = null;
 		specularMap = null;

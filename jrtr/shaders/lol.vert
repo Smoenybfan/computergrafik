@@ -1,17 +1,16 @@
 #version 330
-// GLSL version 1.50
+// GLSL version 1.50 
 // Vertex shader for diffuse shading in combination with a texture map
 
 #define MAX_LIGHTS 8
 
 
-// Uniform variables, passed in from host program via suitable
+// Uniform variables, passed in from host program via suitable 
 // variants of glUniform*
 uniform mat4 projection;
 uniform mat4 modelview;
 uniform mat4 model;
 uniform mat4 view;
-uniform vec3 camPos;
 
 
 // Input vertex attributes; passed in from host program to shader
@@ -36,7 +35,7 @@ void main()
 {
 
 	// Pass texture coordiantes to fragment shader, OpenGL automatically
-	// interpolates them to each pixel  (in a perspectively correct manner)
+	// interpolates them to each pixel  (in a perspectively correct manner) 
 	frag_texcoord = texcoord;
 
 	// Transform position, including projection matrix
@@ -51,5 +50,8 @@ void main()
 	//Normal = normal;
     Normal = mat3(transpose(inverse(model))) * normal;
    // Normal = mat3(modelview) * normal;
+
+
+
 
 }

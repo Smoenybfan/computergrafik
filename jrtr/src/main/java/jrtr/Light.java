@@ -27,6 +27,13 @@ public class Light {
 		spotCutoff = 180.f;
 	}
 
+	public Light(Vector3f position, Vector3f diffuse, Type type){
+		this();
+		this.diffuse=diffuse;
+		this.position=position;
+		this.type=type;
+	}
+
 	public Vector3f direction;
 	public Vector3f position;
 	public Vector3f diffuse;
